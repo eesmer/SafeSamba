@@ -15,6 +15,21 @@ echo "   | 99.Exit                                                            |"
 echo "   |--------------------------------------------------------------------|"
 }
 
+function read_input(){
+tput setaf 4
+local c
+read -p "You can choose from the menu numbers: " c
+tput sgr0
+case $c in
+99)     exit 0 ;;
+*)
+tput setaf 1
+echo "Please select from the menu numbers"
+tput sgr0
+pause
+esac
+}
+
 # CTRL+C, CTRL+Z
 trap '' SIGINT SIGQUIT SIGTSTP
 
@@ -22,4 +37,5 @@ while true
 do
 clear
 show_menu
+read_input
 done
