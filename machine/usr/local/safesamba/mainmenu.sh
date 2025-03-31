@@ -16,7 +16,7 @@ echo "   |--------------------------------------------------------------------|"
 }
 
 add_user() {
-    NEW_USER=$(whiptail --inputbox "Enter The New UserName:" 10 40 3>&1 1>&2 2>&3)
+    NEW_USER=$(whiptail --inputbox "Enter The New UserName:" 10 45 3>&1 1>&2 2>&3)
     if [[ -n "$NEW_USER" ]]; then
         useradd -m -s /sbin/nologin "$NEW_USER"
         smbpasswd -a "$NEW_USER"
