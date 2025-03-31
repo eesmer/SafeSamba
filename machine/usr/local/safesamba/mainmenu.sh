@@ -15,6 +15,15 @@ echo "   | 99.Exit                                                            |"
 echo "   |--------------------------------------------------------------------|"
 }
 
+add_user() {
+    NEW_USER=$(whiptail --inputbox "Enter The New UserName:" 10 40 3>&1 1>&2 2>&3)
+    if [[ -n "$NEW_USER" ]]; then
+        sudo useradd -m -s /sbin/nologin "$NEW_USER"
+        sudo smbpasswd -a "$NEW_USER"
+        whiptail --msgbox "User $NEW_USER Created" 10 40
+    fi
+}
+
 function read_input(){
 tput setaf 4
 local c
