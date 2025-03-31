@@ -30,7 +30,8 @@ local c
 read -p "You can choose from the menu numbers: " c
 tput sgr0
 case $c in
-99)     exit 0 ;;
+99) add_user ;;
+99) exit 0 ;;
 *)
 tput setaf 1
 echo "Please select from the menu numbers"
