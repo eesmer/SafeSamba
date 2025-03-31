@@ -24,13 +24,23 @@ add_user() {
     fi
 }
 
+delete_user() {
+    DEL_USER=$(whiptail --inputbox "Enter The Name of The User to be Deleted:" 10 45 3>&1 1>&2 2>&3)
+    if [[ -n "$DEL_USER" ]]; then
+        smbpasswd -x "$DEL_USER"
+        userdel -r "$DEL_USER"
+        whiptail --msgbox "User $DEL_USER deleted." 10 40
+    fi
+}
+
 function read_input(){
 tput setaf 4
 local c
 read -p "You can choose from the menu numbers: " c
 tput sgr0
 case $c in
-99) add_user ;;
+1) add_user ;;
+2) delete_user ;;
 99) exit 0 ;;
 *)
 tput setaf 1
