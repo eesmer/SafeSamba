@@ -16,7 +16,7 @@ echo "   |--------------------------------------------------------------------|"
 }
 
 add_user() {
-    NEW_USER=$(whiptail --inputbox "Enter The New UserName:" 10 45 3>&1 1>&2 2>&3)
+    NEW_USER=$(whiptail --inputbox "Enter The New UserName:" 10 40 3>&1 1>&2 2>&3)
     if [[ -n "$NEW_USER" ]]; then
         useradd -m -s /sbin/nologin "$NEW_USER"
         smbpasswd -a "$NEW_USER"
@@ -33,6 +33,11 @@ delete_user() {
     fi
 }
 
+list_users() {
+    USERS=$(pdbedit -L | cut -d: -f1)
+    whiptail --msgbox "Samba Kullanıcıları:\n$USERS" 20 60
+}
+
 function read_input(){
 tput setaf 4
 local c
@@ -41,8 +46,9 @@ tput sgr0
 case $c in
 1) add_user ;;
 2) delete_user ;;
+3) list_users ;;
 99) exit 0 ;;
-*)
+*)      
 tput setaf 1
 echo "Please select from the menu numbers"
 tput sgr0
