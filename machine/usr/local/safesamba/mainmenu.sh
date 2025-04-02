@@ -51,7 +51,7 @@ USER_ENTRIES=()
 SELECTED_USERS=$(whiptail --title "Select Users" --checklist "Select Users:" 20 60 10 "${USER_ENTRIES[@]}" 3>&1 1>&2 2>&3)
 SELECTED_USERS=$(echo "$SELECTED_USERS" | tr -d '"')
 
-SHARE_PATH="/usr/local/safesamba/shares/$SHARE_NAME"
+SHARE_PATH="/srv/samba/$SHARE_NAME"
 mkdir -p "$SHARE_PATH"
 chmod 770 "$SHARE_PATH"
 chown root:"$SHARE_NAME" "$SHARE_PATH"
@@ -61,6 +61,8 @@ echo "    path = $SHARE_PATH" >> /etc/samba/smb.conf
 echo "    valid users = $SELECTED_USERS" >> /etc/samba/smb.conf
 echo "    read only = no" >> /etc/samba/smb.conf
 echo "    guest ok = no" >> /etc/samba/smb.conf
+echo "    create mask = 0660" >> /etc/samba/smb.conf
+echo "    directory mask = 0770" >> /etc/samba/smb.conf
 
 systemctl restart smbd
 whiptail --msgbox "SHARE1 Share created" 7 30
