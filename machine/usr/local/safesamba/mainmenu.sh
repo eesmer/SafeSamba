@@ -5,9 +5,9 @@ date
 echo "   |--------------------------------------------------------------------|"
 echo "   | :::.. SafeSamba SecureFileserver ..:::                             |"
 echo "   |--------------------------------------------------------------------|"
-echo "   | #  USer Man.  | Share Man.      | Logs/Reports                     |"
+echo "   | #  USer Man.  | # Share Man.    | # Logs/Reports                   |"
 echo "   | -------------------------------------------------------------------|"
-echo "   | 1.Add User    | 11.New Share    | 20.View Logs                     |"
+echo "   | 1.Add User    | 11.Create Share | 20.View Logs                     |"
 echo "   | 2.Delete User | 12.Remove Share | 21.Quarantine Files              |"
 echo "   | 3.User List   | 13.Share List   | 22.Scan Service Status           |"
 echo "   |--------------------------------------------------------------------|"
@@ -38,6 +38,34 @@ list_users() {
     whiptail --msgbox "Samba Kullanıcıları:\n$USERS" 20 60
 }
 
+create_share() {
+SHARE_NAME=$(whiptail --inputbox "Share Name:" 8 40 3>&1 1>&2 2>&3)
+#[ -z "$SHARE_NAME" ] && bash mainmenu.sh
+pdbedit -L | cut -d: -f1 | tr ' ' '\n' | sed '/^$/d' > /tmp/userlist
+
+USER_ENTRIES=()
+    while read -r user; do
+            USER_ENTRIES+=("$user" "" OFF)  # UserName + Blank Desc. + Default OFF
+    done < /tmp/userlist
+    
+SELECTED_USERS=$(whiptail --title "Select Users" --checklist "Select Users:" 20 60 10 "${USER_ENTRIES[@]}" 3>&1 1>&2 2>&3)
+SELECTED_USERS=$(echo "$SELECTED_USERS" | tr -d '"')
+
+SHARE_PATH="/usr/local/safesamba/shares/$SHARE_NAME"
+mkdir -p "$SHARE_PATH"
+chmod 770 "$SHARE_PATH"
+chown root:"$SHARE_NAME" "$SHARE_PATH"
+
+echo "[$SHARE_NAME]" >> /etc/samba/smb.conf
+echo "    path = $SHARE_PATH" >> /etc/samba/smb.conf
+echo "    valid users = $SELECTED_USERS" >> /etc/samba/smb.conf
+echo "    read only = no" >> /etc/samba/smb.conf
+echo "    guest ok = no" >> /etc/samba/smb.conf
+
+systemctl restart smbd
+whiptail --msgbox "SHARE1 Share created" 7 30
+}
+
 function read_input(){
 tput setaf 4
 local c
@@ -47,6 +75,7 @@ case $c in
 1) add_user ;;
 2) delete_user ;;
 3) list_users ;;
+11) create_share ;;
 99) exit 0 ;;
 *)      
 tput setaf 1
