@@ -65,7 +65,7 @@ echo "    create mask = 0660" >> /etc/samba/smb.conf
 echo "    directory mask = 0770" >> /etc/samba/smb.conf
 
 systemctl restart smbd
-whiptail --msgbox "SHARE1 Share created" 7 30
+whiptail --msgbox "{$SHARE_NAME} Share created" 7 30
 }
 
 function read_input(){
