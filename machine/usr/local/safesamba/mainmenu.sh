@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SHARE_DIR="/srv/samba/shares"
+
 function show_menu(){
 date
 echo "   |--------------------------------------------------------------------|"
@@ -65,8 +67,15 @@ echo "    create mask = 0660" >> /etc/samba/smb.conf
 echo "    directory mask = 0770" >> /etc/samba/smb.conf
 
 systemctl restart smbd
-whiptail --msgbox "{$SHARE_NAME} Share created" 7 30
+whiptail --msgbox "{$SHARE_NAME} Share Created" 7 30
 }
+
+list_share() {
+    SHARES=$(ls "$SHARE_DIR")
+    whiptail --msgbox "Share List:\n$SHARES" 20 60
+}
+
+
 
 function read_input(){
 tput setaf 4
@@ -78,6 +87,7 @@ case $c in
 2) delete_user ;;
 3) list_users ;;
 11) create_share ;;
+13) list_share ;;
 99) exit 0 ;;
 *)      
 tput setaf 1
