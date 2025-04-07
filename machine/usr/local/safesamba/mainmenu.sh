@@ -70,6 +70,14 @@ systemctl restart smbd
 whiptail --msgbox "{$SHARE_NAME} Share Created" 7 30
 }
 
+delete_share() {
+    DEL_SHARE=$(whiptail --inputbox "Enter the name of the Share:" 10 40 3>&1 1>&2 2>&3)
+    if [[ -n "$DEL_SHARE" ]]; then
+        rm -rf "$SHARE_DIR/$DEL_SHARE"
+        whiptail --msgbox "Share $DEL_SHARE deleted." 10 40
+    fi
+}
+
 list_share() {
     SHARES=$(ls "$SHARE_DIR")
     whiptail --msgbox "Share List:\n$SHARES" 20 60
@@ -87,6 +95,7 @@ case $c in
 2) delete_user ;;
 3) list_users ;;
 11) create_share ;;
+12) delete_share ;;
 13) list_share ;;
 99) exit 0 ;;
 *)      
