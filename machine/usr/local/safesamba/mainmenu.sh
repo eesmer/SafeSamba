@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SHARE_DIR="/srv/samba/shares"
+SHARE_DIR="/usr/local/safesamba/shares"
 
 function show_menu(){
 date
@@ -53,10 +53,11 @@ USER_ENTRIES=()
 SELECTED_USERS=$(whiptail --title "Select Users" --checklist "Select Users:" 20 60 10 "${USER_ENTRIES[@]}" 3>&1 1>&2 2>&3)
 SELECTED_USERS=$(echo "$SELECTED_USERS" | tr -d '"')
 
-SHARE_PATH="/srv/samba/$SHARE_NAME"
+SHARE_PATH="$SHARE_DIR/$SHARE_NAME"
 mkdir -p "$SHARE_PATH"
 chmod 770 "$SHARE_PATH"
-chown root:"$SHARE_NAME" "$SHARE_PATH"
+#chown root:"$SHARE_NAME" "$SHARE_PATH"
+chown root:smbusers "$SHARE_PATH"
 
 echo "[$SHARE_NAME]" >> /etc/samba/smb.conf
 echo "    path = $SHARE_PATH" >> /etc/samba/smb.conf
@@ -82,8 +83,6 @@ list_share() {
     SHARES=$(ls "$SHARE_DIR")
     whiptail --msgbox "Share List:\n$SHARES" 20 60
 }
-
-
 
 function read_input(){
 tput setaf 4
