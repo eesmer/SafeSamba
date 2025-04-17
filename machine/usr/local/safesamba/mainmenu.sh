@@ -1,5 +1,6 @@
 #!/bin/bash
 
+LOG_FILE="/var/log/samba/scan.log"
 SHARE_DIR="/usr/local/safesamba/shares"
 
 function show_menu(){
