@@ -85,6 +85,17 @@ list_share() {
     whiptail --msgbox "Share List:\n$SHARES" 20 60
 }
 
+view_logs() {
+    LOG_FILE="/var/log/samba/scan.log"
+
+    if [[ -s "$LOG_FILE" ]]; then
+        dialog --title "Samba Log Records" --textbox "$LOG_FILE" 40 145
+    else
+        whiptail --msgbox "Log File Not Found or Log File is Empty" 10 40
+    fi
+    clear
+}
+
 function read_input(){
 tput setaf 4
 local c
