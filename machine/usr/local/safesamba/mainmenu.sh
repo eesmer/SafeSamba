@@ -108,6 +108,7 @@ case $c in
 11) create_share ;;
 12) delete_share ;;
 13) list_share ;;
+20) view_logs ;;
 99) exit 0 ;;
 *)      
 tput setaf 1
